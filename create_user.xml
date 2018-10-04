@@ -1,4 +1,4 @@
-<user>
+<data>
 	<externalId>bogus</externalId>
 	<dataSourceId>externalId:SYSTEM</dataSourceId>
 	<userName>bogus</userName>
@@ -7,4 +7,4 @@
 		<given>Fake</given>
 		<family>User</family>
 	</name>
-</user>
+</data>
