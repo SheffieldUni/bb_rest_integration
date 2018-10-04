@@ -10,6 +10,7 @@ import xmltodict
 import json
 
 #TODO: Replace this with a better cache. This most likely isn't thread-safe. 
+# Memcache? Filesystem? UWSGI?
 from werkzeug.contrib.cache import SimpleCache
 
 # Initialize our app, secret key, configuration, and database. 
@@ -19,13 +20,20 @@ app.config.from_pyfile('config.py')
 #db = SQLAlchemy(app)
 cache = SimpleCache()
 
+# Where all the magic translation happens. 
+# Depends on a generic top level XML element
+# in the request body--currently 'data'.
+# TODO: Make that configurable? 
+def xml_to_json(xml):
+	dict = xmltodict.parse(xml)
+	return json.dumps(dict['data'])
 
 # Helper function to put together the headers for requests to MOLE. 
 def format_auth_headers(token):
 	return {'Authorization': 'Bearer ' + token,'Content-Type': 'application/json'}
 	
 
-# TODO: Replace caching mechanism. 
+# TODO: Replace caching mechanism. See above re: SimpleCache.
 # TODO: Call this before every request? 
 def get_auth_token():
 	access_token = cache.get('access_token')
@@ -48,14 +56,11 @@ def get_auth_token():
 # TODO: Store the rest of the route ('users') in a database table or move it to the config file.
 @app.route('/user/create', methods=['POST'])
 def create_user():
-	#xmldata = request.data
-	dict = xmltodict.parse(request.data)
-	json_body = json.dumps(dict['user'])
-
+	json_body = xml_to_json(request.data)
 	token = get_auth_token()
 	headers = format_auth_headers(token)
-	r = requests.post(app.config['BASE_URL'] + 'users', headers=headers, data=json_body)
 
+	r = requests.post(app.config['BASE_URL'] + 'users', headers=headers, data=json_body)
 	return str(r.status_code)
 
 	
