@@ -1,0 +1,10 @@
+<user>
+	<externalId>bogus</externalId>
+	<dataSourceId>externalId:SYSTEM</dataSourceId>
+	<userName>bogus</userName>
+	<password>password</password>
+	<name>
+		<given>Fake</given>
+		<family>User</family>
+	</name>
+</user>
