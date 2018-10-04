@@ -29,12 +29,12 @@ def xml_to_json(xml):
 	return json.dumps(dict['data'])
 
 # Helper function to put together the headers for requests to MOLE. 
-def format_auth_headers(token):
-	return {'Authorization': 'Bearer ' + token,'Content-Type': 'application/json'}
+def get_auth_headers():
+	return {'Authorization': 'Bearer ' + get_auth_token(),'Content-Type': 'application/json'}
 	
 
+# Get a cached OAuth2 token, or a new one from MOLE if the current token's expired. 
 # TODO: Replace caching mechanism. See above re: SimpleCache.
-# TODO: Call this before every request? 
 def get_auth_token():
 	access_token = cache.get('access_token')
 	if access_token is None:
@@ -56,11 +56,7 @@ def get_auth_token():
 # TODO: Store the rest of the route ('users') in a database table or move it to the config file.
 @app.route('/user/create', methods=['POST'])
 def create_user():
-	json_body = xml_to_json(request.data)
-	token = get_auth_token()
-	headers = format_auth_headers(token)
-
-	r = requests.post(app.config['BASE_URL'] + 'users', headers=headers, data=json_body)
+	r = requests.post(app.config['BASE_URL'] + 'users', headers=get_auth_headers(), data=xml_to_json(request.data))
 	return str(r.status_code)
 
 	
