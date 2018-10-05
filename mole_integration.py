@@ -15,8 +15,14 @@ cache = SimpleCache()
 
 # ----------- Routes	
 
-# TODO: Store the rest of the route ('users') in a database table or move it to the config file.
+# TODO: Store the rest of the routes (e.g., 'users') in a database table or move them to the config file.
+
 @app.route('/user/create', methods=['POST'])
 def create_user():
 	r = requests.post(BASE_URL + 'users', headers=get_auth_headers(cache), data=xml_to_json(request.data))
+	return str(r.status_code)
+
+@app.route('/user/delete/<username>', methods=['DELETE'])
+def delete_user(username):
+	r = requests.delete(BASE_URL + 'users/userName:' + username, headers=get_auth_headers(cache), data=xml_to_json(request.data))
 	return str(r.status_code)
