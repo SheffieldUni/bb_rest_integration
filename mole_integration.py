@@ -15,6 +15,7 @@ cache = SimpleCache()
 
 # ----------- Routes	
 
+# TODO: Implement an API key function so not just any random person can call these. 
 # TODO: Store the rest of the routes (e.g., 'users') in a database table or move them to the config file.
 
 @app.route('/user/create', methods=['POST'])
@@ -22,7 +23,19 @@ def create_user():
 	r = requests.post(BASE_URL + 'users', headers=get_auth_headers(cache), data=xml_to_json(request.data))
 	return str(r.status_code)
 
-@app.route('/user/delete/<username>', methods=['DELETE'])
+@app.route('/user/delete/<userId>', methods=['DELETE'])
 def delete_user(username):
-	r = requests.delete(BASE_URL + 'users/userName:' + username, headers=get_auth_headers(cache), data=xml_to_json(request.data))
+	r = requests.delete(BASE_URL + 'users/userName:' + userId, headers=get_auth_headers(cache), data=xml_to_json(request.data))
 	return str(r.status_code)
+	
+@app.route('/course/<courseId>/enrol/user/<userId>', methods=['PUT'])
+def enrol_user(courseId, userId):
+	print(BASE_URL + 'courses/courseId:' + courseId + '/users/userName:' + userId)
+	r = requests.put(BASE_URL + 'courses/courseId:' + courseId + '/users/userName:' + userId, headers=get_auth_headers(cache), data=xml_to_json(request.data))
+	return str(r.status_code)
+	
+@app.route('/course/update/<courseId>/user/<userId>', methods=['PATCH'])
+def update_user(courseId, userId):
+	print(BASE_URL + 'courses/courseId:' + courseId + '/users/userName:' + userId)
+	r = requests.patch(BASE_URL + 'courses/courseId:' + courseId + '/users/userName:' + userId, headers=get_auth_headers(cache), data=xml_to_json(request.data))
+	return str(r.status_code)	
