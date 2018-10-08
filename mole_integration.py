@@ -15,11 +15,24 @@ def check_authorization():
 	if request.headers.get('Authorization') != API_KEY:
 		return Response(status=403)
 	
-# Central handler for forwarding requests to MOLE. 
+# Central handler for forwarding requests to MOLE.
+# There's a bit of magic going on here, so be sure to read the comments. 
+# TODO: Logging. Separate module?  
 def process_request(request):
-	# Get the method to call based on the original request's method,
-	# then send everything on to MOLE. 
+	# This first line gets the appropriate function from the requests library
+	# based on the method used in the original request and assigns it to mole_request.
+	# E.g., if the original request came in as a POST, mole_request becomes
+	# requests.post(). The lower() call is because the the methods come in as
+	# UPPERCASE, but need to be lowercase to match the method names in requests. 
 	mole_request = getattr(requests, request.method.lower())
+	
+	# This is where we do the actual get/post/etc. The beauty of copying the 
+	# Blackboard endpoint structure (e.g., '/users') is that we can just call 
+	# request.path and tack the result onto the MOLE base URL without having to 
+	# construct the endpoint manually. 
+	#
+	# The other two method calls handle getting our OAuth token and translating the
+	# incoming XML to the JSON that MOLE expects. Then we return the HTTP response code to our caller. 
 	resp = mole_request(BASE_URL + request.path, headers=get_auth_headers(), data=xml_to_json(request.data))
 	return str(resp.status_code)
 	
