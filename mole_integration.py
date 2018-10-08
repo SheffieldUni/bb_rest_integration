@@ -10,11 +10,11 @@ app = Flask(__name__)
 
 # Security check to see if our caller has sent along an API key.
 # Without this, anyone could call these functions. 
-#@app.before_request
+@app.before_request
 #def check_authorization():
 #	if request.headers.get('Authorization') != API_KEY:
 #		return Response(status=403)
-
+print(request.headers.get('Authorization'))
 
 # ----------- Routes	
 #
