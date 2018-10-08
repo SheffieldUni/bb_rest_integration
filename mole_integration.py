@@ -15,8 +15,10 @@ def check_authorization():
 	if request.headers.get('Authorization') != API_KEY:
 		return Response(status=403)
 	
-
+# Central handler for forwarding requests to MOLE. 
 def process_request(request):
+	# Get the method to call based on the original request's method,
+	# then send everything on to MOLE. 
 	mole_request = getattr(requests, request.method.lower())
 	resp = mole_request(BASE_URL + request.path, headers=get_auth_headers(), data=xml_to_json(request.data))
 	return str(resp.status_code)
@@ -31,23 +33,13 @@ def process_request(request):
 
 @app.route('/users', methods=['POST'])
 def create_user():
-	#r = requests.post(BASE_URL + request.path, headers=get_auth_headers(), data=xml_to_json(request.data))
-	#return str(r.status_code)
 	return process_request(request)
-
 
 @app.route('/users/userName:<userId>', methods=['DELETE'])
 def delete_user(userId):
-	r = requests.delete(BASE_URL + request.path, headers=get_auth_headers(), data=xml_to_json(request.data))
-	return str(r.status_code)
+	return process_request(request)
 	
-@app.route('/courses/courseId:<courseId>/users/userName:<userId>', methods=['PUT'])
-def enrol_user(courseId, userId):
-	r = requests.put(BASE_URL + request.path, headers=get_auth_headers(), data=xml_to_json(request.data))
-	return str(r.status_code)
-	
-@app.route('/courses/courseId:<courseId>/users/userName:<userId>', methods=['PATCH'])	
-def update_user(courseId, userId):
-	r = requests.patch(BASE_URL + request.path, headers=get_auth_headers(), data=xml_to_json(request.data))
-	return str(r.status_code)	
+@app.route('/courses/courseId:<courseId>/users/userName:<userId>', methods=['PUT', 'PATCH'])
+def enrol_or_update_user(courseId, userId):
+	return process_request(request)
 	
