@@ -16,6 +16,11 @@ def check_authorization():
 		return Response(status=403)
 	
 
+def process_request(request):
+	mole_request = getattr(requests, request.method.lower())
+	resp = mole_request(BASE_URL + request.path, headers=get_auth_headers(), data=xml_to_json(request.data))
+	return str(resp.status_code)
+	
 # ----------- Routes	
 #
 # Everything below here is basically a wrapper around Blackboard's REST API endpoints. 
@@ -26,8 +31,9 @@ def check_authorization():
 
 @app.route('/users', methods=['POST'])
 def create_user():
-	r = requests.post(BASE_URL + request.path, headers=get_auth_headers(), data=xml_to_json(request.data))
-	return str(r.status_code)
+	#r = requests.post(BASE_URL + request.path, headers=get_auth_headers(), data=xml_to_json(request.data))
+	#return str(r.status_code)
+	return process_request(request)
 
 
 @app.route('/users/userName:<userId>', methods=['DELETE'])
