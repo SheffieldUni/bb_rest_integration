@@ -12,6 +12,8 @@ def get_auth_headers():
 	
 
 # Get a cached OAuth2 token, or a new one from MOLE if the current token's expired. 
+# TODO: Remove "Getting new token"/"Using cached token"--they were great for testing, 
+# but they're log spam at this point. 
 def get_auth_token():
 	access_token = cache.get('access_token')
 	if access_token is None:
