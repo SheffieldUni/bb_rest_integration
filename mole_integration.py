@@ -23,26 +23,24 @@ def check_authorization():
 		return Response(status=403)
 
 
-# TODO: Store the rest of the routes (e.g., 'users') in a database table or move them to the config file.
-
-@app.route('/user/create', methods=['POST'])
+@app.route('/users', methods=['POST'])
 def create_user():
-	r = requests.post(BASE_URL + 'users', headers=get_auth_headers(cache), data=xml_to_json(request.data))
+	r = requests.post(BASE_URL + request.path, headers=get_auth_headers(cache), data=xml_to_json(request.data))
 	return str(r.status_code)
 
-@app.route('/user/delete/<userId>', methods=['DELETE'])
+
+@app.route('/users/userName:<userId>', methods=['DELETE'])
 def delete_user(userId):
-	r = requests.delete(BASE_URL + 'users/userName:' + userId, headers=get_auth_headers(cache), data=xml_to_json(request.data))
+	r = requests.delete(BASE_URL + request.path, headers=get_auth_headers(cache), data=xml_to_json(request.data))
 	return str(r.status_code)
 	
-@app.route('/course/<courseId>/enrol/user/<userId>', methods=['PUT'])
+@app.route('/courses/courseId:<courseId>/users/userName:<userId>', methods=['PUT'])
 def enrol_user(courseId, userId):
-	print(BASE_URL + 'courses/courseId:' + courseId + '/users/userName:' + userId)
-	r = requests.put(BASE_URL + 'courses/courseId:' + courseId + '/users/userName:' + userId, headers=get_auth_headers(cache), data=xml_to_json(request.data))
+	r = requests.put(BASE_URL + request.path, headers=get_auth_headers(cache), data=xml_to_json(request.data))
 	return str(r.status_code)
 	
-@app.route('/course/update/<courseId>/user/<userId>', methods=['PATCH'])
+@app.route('/courses/courseId:<courseId>/users/userName:<userId>', methods=['PATCH'])	
 def update_user(courseId, userId):
-	print(BASE_URL + 'courses/courseId:' + courseId + '/users/userName:' + userId)
-	r = requests.patch(BASE_URL + 'courses/courseId:' + courseId + '/users/userName:' + userId, headers=get_auth_headers(cache), data=xml_to_json(request.data))
+	r = requests.patch(BASE_URL + request.path, headers=get_auth_headers(cache), data=xml_to_json(request.data))
 	return str(r.status_code)	
+	
