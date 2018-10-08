@@ -12,9 +12,9 @@ app = Flask(__name__)
 # Without this, anyone could call these functions. 
 @app.before_request
 def check_authorization():
-#	if request.headers.get('Authorization') != API_KEY:
-#		return Response(status=403)
-	print(request.headers.get('Authorization'))
+	if request.headers.get('Authorization') != API_KEY:
+		return Response(status=403)
+	
 
 # ----------- Routes	
 #
