@@ -53,8 +53,8 @@ def process_request(request):
 		# TODO: Yep, log this one too.
 		return make_response('Error in request body. ' + str(e), 400)
 	
-	# If we're here, everything went normally. Return our response code.
-	return str(resp.status_code)
+	# If we're here, everything went normally. Return our response body and code.
+	return make_response(resp.content,resp.status_code)
 
 	
 # ----------- Routes	
