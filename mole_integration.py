@@ -51,7 +51,7 @@ def process_request(request):
 	except ExpatError as e:
 		# We've been sent malformed XML. Send a "bad request" response back. 
 		# TODO: Yep, log this one too.
-		return make_response('Error in request body. ' + str(e))
+		return make_response('Error in request body. ' + str(e), 400)
 	
 	# If we're here, everything went normally. Return our response code.
 	return str(resp.status_code)
