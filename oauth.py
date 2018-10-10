@@ -13,6 +13,8 @@ def get_auth_headers():
 
 # Get a cached OAuth2 token, or a new one from MOLE if the current token's expired. 
 # TODO: Error handling. Log getting new token?
+# Thought: catch the error, log it, return None, and let the caller error handling 
+# take care of everything. Slightly neater, possibly. 
 def get_auth_token():
 	access_token = cache.get('access_token')
 	if access_token is None:
