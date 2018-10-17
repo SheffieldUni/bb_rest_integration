@@ -77,12 +77,12 @@ def process_request(request):
 def create_user():
 	return process_request(request)
 
-@app.route('/users/userName:<userId>', methods=['DELETE'])
-def delete_user(userId):
+@app.route('/users/userName:<userId>', methods=['DELETE', 'PATCH'])
+def update_or_delete_user(userId):
 	return process_request(request)
 	
 @app.route('/courses/courseId:<courseId>/users/userName:<userId>', methods=['PUT', 'PATCH'])
-def enrol_or_update_user(courseId, userId):
+def enrol_or_update_course_user(courseId, userId):
 	return process_request(request)
 	
 @app.route('/dbtest', methods=['GET'])
