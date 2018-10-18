@@ -60,7 +60,7 @@ def process_request(request):
 		return make_response('Error in request body. ' + str(e), 400)
 
 	# If we're here, everything went normally. Return our response body and code.
-	#log_transaction(request.path, resp.status_code, request.data)
+	log_transaction(request.path, resp.status_code, request.data)
 	return make_response(resp.content, resp.status_code)
 
 	
