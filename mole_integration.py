@@ -23,7 +23,10 @@ from database_utilities import log_transaction, log_error
 @app.before_request
 def check_authorization():
 	if request.headers.get('Authorization') != API_KEY:
-		return Response(status=403)
+		# Someone tried to get in without the right key. Return a "forbidden" response.
+		error_msg = 'Invalid or missing API key.'
+		log_error(request.path, error_msg, 403, request.data)
+		return make_response(error_msg, 403)
 	
 # Central handler function for forwarding requests to MOLE.
 # There's a bit of magic going on here, so be sure to read the comments. 
@@ -37,8 +40,9 @@ def process_request(request):
 		mole_request = getattr(requests, request.method.lower())
 	except AttributeError:
 		# Someone sent us a method we don't recognize. Error out.
-		# TODO: Log this. 
-		return make_response('Error getting handler for request method: ' + request.method, 500)
+		error_msg = 'Error getting handler for request method: ' + request.method
+		log_error(request.path, error_msg, 500, request.data)
+		return make_response(error_msg, 500)
 	
 	# This is where we do the actual get/post/etc. work. Request.path gets us the endpoint
 	# from the original request, which we can just tack onto the MOLE URL. 
