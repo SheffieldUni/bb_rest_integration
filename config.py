@@ -8,6 +8,7 @@ OAUTH_TIMEOUT = 3600
 # Database config.
 SQLALCHEMY_DATABASE_URI = 'mysql://mole_integration:mole@localhost/mole_integration'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+TRANSACTION_LOGGING = True
 
 # API key for accessing the system.
 # TODO: Make this an actual secure key before you move to production. Duh.

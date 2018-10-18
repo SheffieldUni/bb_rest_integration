@@ -4,7 +4,7 @@ from requests import RequestException
 from xml.parsers.expat import ExpatError
 from oauth import get_auth_headers
 from text_utilities import xml_to_json
-from config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_TRACK_MODIFICATIONS
+from config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_TRACK_MODIFICATIONS, TRANSACTION_LOGGING
 from config import BASE_URL, API_KEY
 
 
@@ -60,7 +60,8 @@ def process_request(request):
 	except (RequestException, Exception) as e:
 		# One of a number of possibilities went wrong in the request. 
 		# (See http://docs.python-requests.org/en/master/_modules/requests/exceptions/ .) 
-		# If we got a generic Exception, something else went wrong--most likely while getting an OAuth token.
+		# If we got a generic Exception, something else went wrong--most likely 
+		# while getting an OAuth token. (See oauth.py .) 
 		# Return an "internal server error" response.
 		log_error(request.path, str(e), 500, request.data)
 		return make_response('ERROR: ' + str(e), 500)
@@ -70,7 +71,8 @@ def process_request(request):
 		return make_response('Error in request body. ' + str(e), 400)
 
 	# If we're here, everything went normally. Return our response body and code.
-	log_transaction(request.path, resp.status_code, request.data)
+	if TRANSACTION_LOGGING:
+		log_transaction(request.path, resp.status_code, request.data)
 	return make_response(resp.content, resp.status_code)
 
 	
