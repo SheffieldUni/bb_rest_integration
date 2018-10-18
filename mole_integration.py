@@ -27,7 +27,9 @@ def check_authorization():
 		error_msg = 'Invalid or missing API key.'
 		log_error(request.path, error_msg, 403, request.data)
 		return make_response(error_msg, 403)
-		
+
+# Custom error handler just in case someone tries to access an
+# endpoint with the wrong method. 		
 @app.errorhandler(405)
 def method_not_allowed(e):
 	error_msg = 'Method ' + request.method + ' not allowed for this endpoint.'
@@ -46,6 +48,7 @@ def process_request(request):
 		mole_request = getattr(requests, request.method.lower())
 	except AttributeError:
 		# Someone sent us a method we don't recognize. Error out.
+		# This shouldn't ever happen, but you can't be too careful.
 		error_msg = 'Error getting handler for request method: ' + request.method
 		log_error(request.path, error_msg, 500, request.data)
 		return make_response(error_msg, 500)
