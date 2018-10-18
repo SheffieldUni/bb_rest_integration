@@ -90,8 +90,9 @@ def process_request(request):
 def create_user():
 	return process_request(request)
 
-@app.route('/users/userName:<userId>', methods=['DELETE', 'PATCH'])
-def update_or_delete_user(userId):
+@app.route('/users/userName:<userId>', methods=['DELETE', 'PATCH', 'GET'])
+def user_operations(userId):
+	# PATCH = update, GET = query, DELETE = delete...duh.
 	return process_request(request)
 	
 @app.route('/courses/courseId:<courseId>/users/userName:<userId>', methods=['PUT', 'PATCH'])
