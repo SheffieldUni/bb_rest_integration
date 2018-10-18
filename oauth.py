@@ -25,10 +25,10 @@ def get_auth_token():
 			access_token = token['access_token']
 			cache.set('access_token', access_token, timeout=OAUTH_TIMEOUT)
 		except Exception as e:
-			# Uh-oh. Something's gone wrong. Log the error, then 
-			# return None and let our caller finish handling the 
-			# whole thing. 
-			#log_error("OAuth token request", str(e), 500, '')
-			access_token = None
+			# Uh-oh. Something's gone wrong. Re-raise our exception.
+			# NB: Throwing around generic Exceptions is kind of terrible, 
+			# but the exception hierarchy of everything above is tangled and
+			# also terrible. Let's just catch everything. 
+			raise Exception(str(e))
 			
 	return access_token

@@ -57,6 +57,10 @@ def process_request(request):
 		# We've been sent malformed XML. Send a "bad request" response back. 
 		log_error(request.path, str(e), 400, request.data)
 		return make_response('Error in request body. ' + str(e), 400)
+	except Exception as e:
+		# Something else went wrong, most likely while getting an Oauth token.
+		log_error(request.path, str(e), 500, request.data)
+		return make_response('ERROR: ' + str(e), 500)
 	
 	# If we're here, everything went normally. Return our response body and code.
 	log_transaction(request.path, resp.status_code, request.data)
