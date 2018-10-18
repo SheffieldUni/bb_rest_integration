@@ -1,7 +1,7 @@
 from requests.auth import HTTPBasicAuth
 from oauthlib.oauth2 import BackendApplicationClient
 from requests_oauthlib import OAuth2Session
-from config import OAUTH_CLIENT_ID,OAUTH_SECRET,OAUTH_URL, OAUTH_TIMEOUT
+from config import OAUTH_CLIENT_ID, OAUTH_SECRET, OAUTH_URL, OAUTH_TIMEOUT
 #from database_utilities import log_error
 # This Redis cache can be swapped out. 
 from werkzeug.contrib.cache import RedisCache
@@ -9,7 +9,7 @@ cache = RedisCache()
 
 # Helper function to put together the proper headers for requests to MOLE. 
 def get_auth_headers():
-	return {'Authorization': 'Bearer ' + get_auth_token(),'Content-Type': 'application/json'}
+	return {'Authorization': 'Bearer ' + get_auth_token(), 'Content-Type': 'application/json'}
 	
 
 # Get a cached OAuth2 token, or a new one from MOLE if the current token's expired. 

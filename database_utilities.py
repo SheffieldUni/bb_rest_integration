@@ -9,7 +9,7 @@ class TransactionRecord(db.Model):
 	endpoint = db.Column(db.String(255), nullable=False)
 	timestamp = db.Column(db.DATETIME, nullable=False)
 	status = db.Column(db.Integer, nullable=False)	
-	xml_body = db.Column(db.TEXT, nullable = False)
+	xml_body = db.Column(db.TEXT, nullable=False)
 	
 	def __repr__(self):
 		return '<TransactionRecord: %r>' % (self.endpoint + ' ' + self.response + ' ' + self.timestamp)	
@@ -20,7 +20,7 @@ class ErrorRecord(db.Model):
 	timestamp = db.Column(db.DATETIME, nullable=False)
 	error_message = db.Column(db.String(120), nullable=False)
 	status = db.Column(db.Integer, nullable=False)	
-	xml_body = db.Column(db.TEXT, nullable = False)
+	xml_body = db.Column(db.TEXT, nullable=False)
 	
 	def __repr__(self):
 		return '<TransactionRecord: %r>' % (self.endpoint + ' ' + self.response + ' ' + self.timestamp)	
