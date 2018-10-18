@@ -2,7 +2,7 @@ from requests.auth import HTTPBasicAuth
 from oauthlib.oauth2 import BackendApplicationClient
 from requests_oauthlib import OAuth2Session
 from config import OAUTH_CLIENT_ID,OAUTH_SECRET,OAUTH_URL, OAUTH_TIMEOUT
-from database_utilities import log_error
+#from database_utilities import log_error
 # This Redis cache can be swapped out. 
 from werkzeug.contrib.cache import RedisCache
 cache = RedisCache()
@@ -28,7 +28,7 @@ def get_auth_token():
 			# Uh-oh. Something's gone wrong. Log the error, then 
 			# return None and let our caller finish handling the 
 			# whole thing. 
-			log_error("OAuth token request", str(e), 500, '')
+			#log_error("OAuth token request", str(e), 500, '')
 			access_token = None
 			
 	return access_token
