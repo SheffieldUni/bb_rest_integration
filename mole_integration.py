@@ -41,7 +41,7 @@ def process_request(request):
 		# TODO: Log this. 
 		return make_response('Error getting handler for request method: ' + request.method,  500)
 	
-	# This is where we do the actual get/post/etc. Request.path gets us the endpoint
+	# This is where we do the actual get/post/etc. work. Request.path gets us the endpoint
 	# from the original request, which we can just tack onto the MOLE URL. 
 	#
 	# The other two method calls handle getting our OAuth token and translating the
@@ -85,7 +85,5 @@ def update_or_delete_user(userId):
 def enrol_or_update_course_user(courseId, userId):
 	return process_request(request)
 	
-@app.route('/dbtest', methods=['GET'])
-def test_db():
-	return db_test()
+
 	

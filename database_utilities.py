@@ -41,7 +41,3 @@ def log_error(endpoint, error_message, status, xml_body):
 	db.session.commit()
 	db.session.close()	
 	
-def db_test():
-	#db.create_all()
-	return("Done.")
-	#return str(db.session.execute('select * from upload_record where id=10').fetchone())
