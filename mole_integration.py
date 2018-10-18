@@ -48,19 +48,17 @@ def process_request(request):
 	# incoming XML to the JSON that MOLE expects. Then we return the HTTP response code to our caller. 
 	try:
 		resp = mole_request(BASE_URL + request.path, headers=get_auth_headers(), data=xml_to_json(request.data))
-	except RequestException as e:
-		# One of a number of possibilities went wrong. (See http://docs.python-requests.org/en/master/_modules/requests/exceptions/ .) 
+	except (RequestException, Exception) as e:
+		# One of a number of possibilities went wrong in the request. (See http://docs.python-requests.org/en/master/_modules/requests/exceptions/ .) 
+		# If we got a generic Exception, something else went wrong--most likely while getting an OAuth token.
 		# Return an "internal server error" response.
 		log_error(request.path, str(e), 500, request.data)
 		return make_response('ERROR: ' + str(e), 500)
 	except ExpatError as e:
-		# We've been sent malformed XML. Send a "bad request" response back. 
+		# We've been sent malformed XML. Return a "bad request" response. 
 		log_error(request.path, str(e), 400, request.data)
 		return make_response('Error in request body. ' + str(e), 400)
-	except Exception as e:
-		# Something else went wrong, most likely while getting an Oauth token.
-		log_error(request.path, str(e), 500, request.data)
-		return make_response('ERROR: ' + str(e), 500)
+
 	
 	# If we're here, everything went normally. Return our response body and code.
 	log_transaction(request.path, resp.status_code, request.data)
