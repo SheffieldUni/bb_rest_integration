@@ -15,7 +15,7 @@ app = Flask(__name__)
 # so our SQLAlchemy instance will bind to the app instance properly.  
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
-from database_utilities import TransactionRecord, ErrorRecord, log_transaction, log_error, db_test
+from database_utilities import log_transaction, log_error
 
 
 # Security check to see if our caller has sent along an API key.
@@ -39,7 +39,7 @@ def process_request(request):
 	except AttributeError:
 		# Someone sent us a method we don't recognize. Error out.
 		# TODO: Log this. 
-		return make_response('Error getting handler for request method: ' + request.method,  500)
+		return make_response('Error getting handler for request method: ' + request.method, 500)
 	
 	# This is where we do the actual get/post/etc. work. Request.path gets us the endpoint
 	# from the original request, which we can just tack onto the MOLE URL. 
@@ -49,7 +49,8 @@ def process_request(request):
 	try:
 		resp = mole_request(BASE_URL + request.path, headers=get_auth_headers(), data=xml_to_json(request.data))
 	except (RequestException, Exception) as e:
-		# One of a number of possibilities went wrong in the request. (See http://docs.python-requests.org/en/master/_modules/requests/exceptions/ .) 
+		# One of a number of possibilities went wrong in the request. 
+		# (See http://docs.python-requests.org/en/master/_modules/requests/exceptions/ .) 
 		# If we got a generic Exception, something else went wrong--most likely while getting an OAuth token.
 		# Return an "internal server error" response.
 		log_error(request.path, str(e), 500, request.data)
@@ -62,16 +63,18 @@ def process_request(request):
 	
 	# If we're here, everything went normally. Return our response body and code.
 	log_transaction(request.path, resp.status_code, request.data)
-	return make_response(resp.content,resp.status_code)
+	return make_response(resp.content, resp.status_code)
 
 	
 # ----------- Routes	
 #
 # Everything below here is basically a wrapper around Blackboard's REST API endpoints. 
 # Why? Because SITS doesn't currently speak OAuth2 or JSON, and MOLE needs both of those
-# when you're calling the API. What these do is 1.) get an OAuth2 access token (or
-# use a cached one), 2.) build the authorization headers for talking to MOLE, and 3.) transform
-# the XML we'll be getting into JSON. It should be relatively quick, but we'll see. 
+# when you're calling the API. What these do is: 
+# 1.) get an OAuth2 access token from MOLE (or use a cached one), 
+# 2.) build the authorization headers for actually talking to MOLE,  
+# 3.) transform the XML we get from SITS into JSON, and
+# 4.) send the JSON on to the right MOLE endpoint with the right method. 
 
 @app.route('/users', methods=['POST'])
 def create_user():
