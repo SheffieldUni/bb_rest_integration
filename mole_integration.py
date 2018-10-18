@@ -27,6 +27,12 @@ def check_authorization():
 		error_msg = 'Invalid or missing API key.'
 		log_error(request.path, error_msg, 403, request.data)
 		return make_response(error_msg, 403)
+		
+@app.errorhandler(405)
+def method_not_allowed(e):
+	error_msg = 'Method ' + request.method + ' not allowed for this endpoint.'
+	log_error(request.path, error_msg, 405, request.data)
+	return make_response(error_msg, 405)
 	
 # Central handler function for forwarding requests to MOLE.
 # There's a bit of magic going on here, so be sure to read the comments. 
