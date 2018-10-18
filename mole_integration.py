@@ -27,7 +27,6 @@ def check_authorization():
 	
 # Central handler function for forwarding requests to MOLE.
 # There's a bit of magic going on here, so be sure to read the comments. 
-# TODO: Logging. Separate module?  
 def process_request(request):
 	# This first bit gets the appropriate function from the requests library
 	# based on the method used in the original request and assigns it to mole_request.
@@ -60,9 +59,8 @@ def process_request(request):
 		log_error(request.path, str(e), 400, request.data)
 		return make_response('Error in request body. ' + str(e), 400)
 
-	
 	# If we're here, everything went normally. Return our response body and code.
-	log_transaction(request.path, resp.status_code, request.data)
+	#log_transaction(request.path, resp.status_code, request.data)
 	return make_response(resp.content, resp.status_code)
 
 	
