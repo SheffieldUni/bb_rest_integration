@@ -6,8 +6,7 @@ from oauth import get_auth_headers
 from text_utilities import xml_to_json
 from config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_TRACK_MODIFICATIONS
 from config import BASE_URL, API_KEY
-# For logging. 
-import datetime
+
 
 # Initialize our app.
 app = Flask(__name__)
@@ -30,7 +29,6 @@ def check_authorization():
 # There's a bit of magic going on here, so be sure to read the comments. 
 # TODO: Logging. Separate module?  
 def process_request(request):
-	timestamp = datetime.datetime.now()
 	# This first bit gets the appropriate function from the requests library
 	# based on the method used in the original request and assigns it to mole_request.
 	# E.g., if the original request came in as a POST, mole_request becomes
@@ -53,15 +51,15 @@ def process_request(request):
 	except RequestException as e:
 		# One of a number of possibilities went wrong. (See http://docs.python-requests.org/en/master/_modules/requests/exceptions/ .) 
 		# Return an "internal server error" response.
-		log_error(request.path, timestamp, str(e), 500, request.data)
+		log_error(request.path, str(e), 500, request.data)
 		return make_response('ERROR: ' + str(e), 500)
 	except ExpatError as e:
 		# We've been sent malformed XML. Send a "bad request" response back. 
-		log_error(request.path, timestamp, str(e), 400, request.data)
+		log_error(request.path, str(e), 400, request.data)
 		return make_response('Error in request body. ' + str(e), 400)
 	
 	# If we're here, everything went normally. Return our response body and code.
-	log_transaction(request.path, timestamp, resp.status_code, request.data)
+	log_transaction(request.path, resp.status_code, request.data)
 	return make_response(resp.content,resp.status_code)
 
 	

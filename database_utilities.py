@@ -1,5 +1,6 @@
 from mole_integration import app
 from flask_sqlalchemy import SQLAlchemy
+import datetime
 
 db = SQLAlchemy(app)
 
@@ -23,17 +24,19 @@ class ErrorRecord(db.Model):
 	
 	def __repr__(self):
 		return '<TransactionRecord: %r>' % (self.endpoint + ' ' + self.response + ' ' + self.timestamp)	
+
+def get_timestamp():
+	return datetime.datetime.now()
 		
-		
-def log_transaction(endpoint, timestamp, status, xml_body):
-	transaction = TransactionRecord(endpoint=endpoint, timestamp=timestamp, status=status, xml_body=xml_body)
+def log_transaction(endpoint, status, xml_body):
+	transaction = TransactionRecord(endpoint=endpoint, timestamp=get_timestamp(), status=status, xml_body=xml_body)
 	db.session.add(transaction)
 	db.session.commit()
 	db.session.close()	
 	
 		
-def log_error(endpoint, timestamp, error_message, status, xml_body):
-	error = ErrorRecord(endpoint=endpoint, timestamp=timestamp, error_message=error_message, status=status, xml_body=xml_body)
+def log_error(endpoint, error_message, status, xml_body):
+	error = ErrorRecord(endpoint=endpoint, timestamp=get_timestamp(), error_message=error_message, status=status, xml_body=xml_body)
 	db.session.add(error)
 	db.session.commit()
 	db.session.close()	
