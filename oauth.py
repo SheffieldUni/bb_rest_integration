@@ -24,6 +24,6 @@ def get_auth_token():
 		oauth = OAuth2Session(client=client)
 		token = oauth.fetch_token(token_url=OAUTH_URL, auth=auth)
 		access_token = token['access_token']
-		cache.set('access_token', access_token, timeout=3600)
+		cache.set('access_token', access_token, timeout=OAUTH_TIMEOUT)
 		
 	return access_token
