@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server version:               10.3.5-MariaDB - mariadb.org binary distribution
--- Server OS:                    Win64
+-- Host:                         falstaff.shef.ac.uk
+-- Server version:               10.0.36-MariaDB-0ubuntu0.16.04.1 - Ubuntu 16.04
+-- Server OS:                    debian-linux-gnu
 -- HeidiSQL Version:             9.5.0.5264
 -- --------------------------------------------------------
 
@@ -22,6 +22,7 @@ DROP TABLE IF EXISTS `error_record`;
 CREATE TABLE IF NOT EXISTS `error_record` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `endpoint` varchar(255) NOT NULL,
+  `method` varchar(10) NOT NULL,
   `timestamp` datetime NOT NULL,
   `error_message` varchar(120) NOT NULL,
   `status` int(11) NOT NULL,
@@ -35,11 +36,12 @@ DROP TABLE IF EXISTS `transaction_record`;
 CREATE TABLE IF NOT EXISTS `transaction_record` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `endpoint` varchar(255) NOT NULL,
+  `method` varchar(10) NOT NULL,
   `timestamp` datetime NOT NULL,
   `status` int(11) NOT NULL,
   `xml_body` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
