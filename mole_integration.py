@@ -89,17 +89,18 @@ def process_request(request):
 # 3.) transform the XML we get from SITS into JSON, and
 # 4.) send the JSON on to the right MOLE endpoint with the right method. 
 
-@app.route('/users', methods=['POST'])
+@app.route('/v1/users', methods=['POST'])
 def create_user():
 	return process_request(request)
 
-@app.route('/users/userName:<userId>', methods=['DELETE', 'PATCH', 'GET'])
+@app.route('/v1/users/userName:<userId>', methods=['DELETE', 'PATCH', 'GET'])
 def user_operations(userId):
 	# PATCH = update, GET = query, DELETE = delete...duh.
 	return process_request(request)
 	
-@app.route('/courses/courseId:<courseId>/users/userName:<userId>', methods=['PUT', 'PATCH'])
-def enrol_or_update_course_user(courseId, userId):
+@app.route('/v1/courses/courseId:<courseId>/users/userName:<userId>', methods=['PUT', 'PATCH', 'DELETE'])
+def course_enrolment(courseId, userId):
+	# PUT = create course membership, PATCH = update, DELETE = delete, obviously.
 	return process_request(request)
 	
 
