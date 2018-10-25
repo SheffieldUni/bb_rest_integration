@@ -60,6 +60,8 @@ def process_request(request):
 	# incoming XML to the JSON that MOLE expects. Then we return the HTTP response code to our caller. 
 	try:
 		if request.method in BODILESS_METHODS:
+			# We've gotten a request (like a GET or DELETE) that doesn't have a body.
+			# Make the request, but don't try to parse the nonexistent XML. 
 			resp = mole_request(BASE_URL + request.path, headers=get_auth_headers())
 		else:
 			resp = mole_request(BASE_URL + request.path, headers=get_auth_headers(), data=xml_to_json(request.data))
