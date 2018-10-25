@@ -25,7 +25,7 @@ def check_authorization():
 	if request.headers.get('Authorization') != API_KEY:
 		# Someone tried to get in without the right key. Return a "forbidden" response.
 		error_msg = 'Invalid or missing API key.'
-		log_error(request.path, error_msg, 403, request.data)
+		log_error(request.path, request.method, error_msg, 403, request.data)
 		return make_response(error_msg, 403)
 
 # Custom error handler just in case someone tries to access an
@@ -33,7 +33,7 @@ def check_authorization():
 @app.errorhandler(405)
 def method_not_allowed(e):
 	error_msg = 'Method ' + request.method + ' not allowed for this endpoint.'
-	log_error(request.path, error_msg, 405, request.data)
+	log_error(request.path, request.method, error_msg, 405, request.data)
 	return make_response(error_msg, 405)
 	
 # Central handler function for forwarding requests to MOLE.
@@ -50,7 +50,7 @@ def process_request(request):
 		# Someone sent us a method we don't recognize. Error out.
 		# This shouldn't ever happen, but you can't be too careful.
 		error_msg = 'Error getting handler for request method: ' + request.method
-		log_error(request.path, error_msg, 500, request.data)
+		log_error(request.path, request.method, error_msg, 500, request.data)
 		return make_response(error_msg, 500)
 	
 	# This is where we do the actual get/post/etc. work. Request.path gets us the endpoint
@@ -71,7 +71,7 @@ def process_request(request):
 		# If we got a generic Exception, something else went wrong--most likely 
 		# while getting an OAuth token. (See oauth.py .) 
 		# Return an "internal server error" response.
-		log_error(request.path, str(e), 500, request.data)
+		log_error(request.path, request.method, str(e), 500, request.data)
 		return make_response('ERROR: ' + str(e), 500)
 	except ExpatError as e:
 		# We've been sent malformed XML. Return a "bad request" response. 
@@ -80,7 +80,7 @@ def process_request(request):
 
 	# If we're here, everything went normally. Return our response body and code.
 	if TRANSACTION_LOGGING:
-		log_transaction(request.path, resp.status_code, request.data)
+		log_transaction(request.path, request.method, resp.status_code, request.data)
 	return make_response(resp.content, resp.status_code)
 
 	
