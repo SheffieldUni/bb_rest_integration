@@ -75,7 +75,7 @@ def process_request(request):
 		return make_response('ERROR: ' + str(e), 500)
 	except ExpatError as e:
 		# We've been sent malformed XML. Return a "bad request" response. 
-		log_error(request.path, str(e), 400, request.data)
+		log_error(request.path, request.method, str(e), 400, request.data)
 		return make_response('Error in request body. ' + str(e), 400)
 
 	# If we're here, everything went normally. Return our response body and code.

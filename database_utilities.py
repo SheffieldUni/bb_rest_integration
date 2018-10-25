@@ -1,4 +1,3 @@
-#
 from mole_integration import app
 from flask_sqlalchemy import SQLAlchemy
 import datetime
@@ -8,6 +7,7 @@ db = SQLAlchemy(app)
 class TransactionRecord(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	endpoint = db.Column(db.String(255), nullable=False)
+	#method = db.Column(db.String(10), nullable=False)
 	timestamp = db.Column(db.DATETIME, nullable=False)
 	status = db.Column(db.Integer, nullable=False)	
 	xml_body = db.Column(db.TEXT, nullable=False)
@@ -18,6 +18,7 @@ class TransactionRecord(db.Model):
 class ErrorRecord(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	endpoint = db.Column(db.String(255), nullable=False)
+	#method = db.Column(db.String(10), nullable=False)	
 	timestamp = db.Column(db.DATETIME, nullable=False)
 	error_message = db.Column(db.String(120), nullable=False)
 	status = db.Column(db.Integer, nullable=False)	
