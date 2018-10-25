@@ -59,7 +59,10 @@ def process_request(request):
 	# The other two method calls handle getting our OAuth token and translating the
 	# incoming XML to the JSON that MOLE expects. Then we return the HTTP response code to our caller. 
 	try:
-		resp = mole_request(BASE_URL + request.path, headers=get_auth_headers(), data=xml_to_json(request.data))
+		if request.method == 'GET' or request.method == 'DEL':
+			resp = mole_request(BASE_URL + request.path, headers=get_auth_headers())
+		else:
+			resp = mole_request(BASE_URL + request.path, headers=get_auth_headers(), data=xml_to_json(request.data))
 	except (RequestException, Exception) as e:
 		# One of a number of possibilities went wrong in the request. 
 		# (See http://docs.python-requests.org/en/master/_modules/requests/exceptions/ .) 

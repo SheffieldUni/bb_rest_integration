@@ -1,7 +1,7 @@
 import xmltodict 
 import json
 from xml.parsers.expat import ExpatError
-from config import DATA_ELEMENT, DEFAULT_BODY
+from config import DATA_ELEMENT
 
 # Where all the magic translation happens. 
 # Depends on a generic top level XML element
@@ -9,8 +9,6 @@ from config import DATA_ELEMENT, DEFAULT_BODY
 # TODO: We can also get the values we need with list(dict.values())[0],
 # so do we need the name of the top element at all? 
 def xml_to_json(xml):
-	if xml == '':
-		return xml
 	try:
 		dict = xmltodict.parse(xml)
 	except ExpatError as e:
