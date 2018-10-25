@@ -30,14 +30,14 @@ class ErrorRecord(db.Model):
 def get_timestamp():
 	return datetime.datetime.now()
 		
-def log_transaction(endpoint, status, xml_body):
+def log_transaction(endpoint, method, status, xml_body):
 	transaction = TransactionRecord(endpoint=endpoint, method=method, timestamp=get_timestamp(), status=status, xml_body=xml_body)
 	db.session.add(transaction)
 	db.session.commit()
 	db.session.close()	
 	
 		
-def log_error(endpoint, error_message, status, xml_body):
+def log_error(endpoint, method, error_message, status, xml_body):
 	error = ErrorRecord(endpoint=endpoint, method=method, timestamp=get_timestamp(), error_message=error_message, status=status, xml_body=xml_body)
 	db.session.add(error)
 	db.session.commit()
