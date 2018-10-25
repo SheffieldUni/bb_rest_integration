@@ -94,13 +94,23 @@ def create_user():
 	return process_request(request)
 
 @app.route('/v1/users/userName:<userId>', methods=['DELETE', 'PATCH', 'GET'])
+# PATCH = update, GET = query, DELETE = delete...duh.
 def user_operations(userId):
-	# PATCH = update, GET = query, DELETE = delete...duh.
+	return process_request(request)
+
+@app.route('/v2/courses', methods=['POST'])
+# Note the /v2--the v1 endpoint is deprecated.
+def create_course():
+	return process_request(request)
+	
+@app.route('/v2/courses/courseId:<courseId>', methods=['DELETE', 'PATCH', 'GET'])
+# Methods do the same thing as user_operations, but on courses. 
+def course_operations(courseId):
 	return process_request(request)
 	
 @app.route('/v1/courses/courseId:<courseId>/users/userName:<userId>', methods=['PUT', 'PATCH', 'DELETE'])
-def course_enrolment(courseId, userId):
-	# PUT = create course membership, PATCH = update, DELETE = delete, obviously.
+# PUT = create course membership, PATCH = update, DELETE = delete, obviously.
+def course_membership_operations(courseId, userId):
 	return process_request(request)
 	
 
