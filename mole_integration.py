@@ -5,7 +5,7 @@ from xml.parsers.expat import ExpatError
 from oauth import get_auth_headers
 from text_utilities import xml_to_json
 from config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_TRACK_MODIFICATIONS, TRANSACTION_LOGGING
-from config import BASE_URL, API_KEY
+from config import BASE_URL, API_KEY, BODILESS_METHODS
 
 
 # Initialize our app.
@@ -59,7 +59,7 @@ def process_request(request):
 	# The other two method calls handle getting our OAuth token and translating the
 	# incoming XML to the JSON that MOLE expects. Then we return the HTTP response code to our caller. 
 	try:
-		if request.method == 'GET' or request.method == 'DEL':
+		if request.method in BODILESS_METHODS:
 			resp = mole_request(BASE_URL + request.path, headers=get_auth_headers())
 		else:
 			resp = mole_request(BASE_URL + request.path, headers=get_auth_headers(), data=xml_to_json(request.data))

@@ -17,6 +17,7 @@ API_KEY = '8675309'
 # Top-level element for XML bodies sent from SITS. 
 DATA_ELEMENT = 'data'
 
-# Default body for requests without data--e.g., GET or DEL requests.
-DEFAULT_BODY = '<data></data>'
+# Methods that don't have bodies. If we get one of these, 
+# don't try to parse the nonexistent XML. 
+BODILESS_METHODS = ['GET', 'DELETE']
 
