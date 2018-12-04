@@ -1,3 +1,6 @@
+# Contains the classes for writing error/transaction records to the database
+# as well as the functions to write them.
+
 from mole_integration import app
 from flask_sqlalchemy import SQLAlchemy
 import datetime

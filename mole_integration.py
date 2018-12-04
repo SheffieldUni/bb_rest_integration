@@ -1,3 +1,7 @@
+# Main module for integrating SITS with MOLE via Blackboard's REST APIs.
+# This exists because SITS doesn't currently speak OAuth2 or JSON, and 
+# the REST APIs need both. 
+
 from flask import Flask, request, Response, make_response
 import requests
 from requests import RequestException
@@ -8,7 +12,7 @@ from config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_TRACK_MODIFICATIONS, TRAN
 from config import BASE_URL, API_KEY, BODILESS_METHODS
 
 
-# Initialize our app.
+# Initialize our Flask app.
 app = Flask(__name__)
 
 # Database initialization. This needs to be below the app initialization 
@@ -19,7 +23,8 @@ from database_utilities import log_transaction, log_error
 
 
 # Security check to see if our caller has sent along an API key.
-# Without this, anyone could call these functions. 
+# Without this, anyone could call these functions. As the decorator
+# implies, this is called before every request is processed.
 @app.before_request
 def check_authorization():
 	if request.headers.get('Authorization') != API_KEY:
@@ -87,13 +92,15 @@ def process_request(request):
 # ----------- Routes	
 #
 # Everything below here is basically a wrapper around Blackboard's REST API endpoints. 
-# Why? Because SITS doesn't currently speak OAuth2 or JSON, and MOLE needs both of those
-# when you're calling the API. What these do is: 
-# 1.) get an OAuth2 access token from MOLE (or use a cached one), 
+# They: 
+# 1.) get a cached OAuth2 access token (or get a new one from MOLE and cache it), 
 # 2.) build the authorization headers for actually talking to MOLE,  
-# 3.) transform the XML we get from SITS into JSON, and
-# 4.) send the JSON on to the right MOLE endpoint with the right method. 
+# 3.) transform the XML we get from SITS into JSON, 
+# 4.) send the JSON on to the right MOLE endpoint with the right method, and 
+# 5.) return the result to SITS. 
 
+
+# --------------- USERS ---------------
 @app.route('/v1/users', methods=['POST'])
 def create_user():
 	return process_request(request)
@@ -103,6 +110,7 @@ def create_user():
 def user_operations(userId):
 	return process_request(request)
 
+# --------------- COURSES ---------------
 @app.route('/v2/courses', methods=['POST'])
 # Note the /v2--the v1 endpoint is deprecated.
 def create_course():
@@ -113,6 +121,7 @@ def create_course():
 def course_operations(courseId):
 	return process_request(request)
 	
+# --------------- COURSE MEMBERSHIPS ---------------
 @app.route('/v1/courses/courseId:<courseId>/users/userName:<userId>', methods=['PUT', 'PATCH', 'DELETE'])
 # PUT = create course membership, PATCH = update, DELETE = delete, obviously.
 def course_membership_operations(courseId, userId):

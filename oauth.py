@@ -2,8 +2,7 @@ from requests.auth import HTTPBasicAuth
 from oauthlib.oauth2 import BackendApplicationClient
 from requests_oauthlib import OAuth2Session
 from config import OAUTH_CLIENT_ID, OAUTH_SECRET, OAUTH_URL, OAUTH_TIMEOUT
-#from database_utilities import log_error
-# This Redis cache can be swapped out. 
+# This Redis cache can be swapped out with other supported caches. 
 from werkzeug.contrib.cache import RedisCache
 cache = RedisCache()
 
