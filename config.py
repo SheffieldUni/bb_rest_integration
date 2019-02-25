@@ -18,4 +18,7 @@ API_KEY = '8675309'
 # Top-level element for XML bodies sent from SITS.
 DATA_ELEMENT = 'data'
 
+# Transform XML to JSON? 
+TRANSFORM_XML = True
+
 

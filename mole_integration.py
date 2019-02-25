@@ -10,6 +10,7 @@ from oauth import get_auth_headers
 from text_utilities import xml_to_json
 from config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_TRACK_MODIFICATIONS, TRANSACTION_LOGGING
 from config import BASE_URL, API_KEY
+from config import TRANSFORM_XML
 
 
 
@@ -70,8 +71,12 @@ def process_request(request):
 			# Make the request, but don't try to parse the nonexistent XML. 
 			resp = mole_request(BASE_URL + request.path, headers=get_auth_headers())
 		else:
-			# TODO: Account for request bodies that start as JSON and don't need transforming.
-			resp = mole_request(BASE_URL + request.path, headers=get_auth_headers(), data=xml_to_json(request.data))
+			# Check to see if we're in an environment that sends XML instead of JSON. If so, transform it. 
+			if TRANSFORM_XML:
+				body = xml_to_json(request.data)
+			else:
+				body = request.data
+			resp = mole_request(BASE_URL + request.path, headers=get_auth_headers(), data=body)
 	except (RequestException, Exception) as e:
 		# One of a number of possibilities went wrong in the request. 
 		# (See http://docs.python-requests.org/en/master/_modules/requests/exceptions/ .) 
