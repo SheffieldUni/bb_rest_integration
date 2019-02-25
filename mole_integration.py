@@ -10,8 +10,7 @@ from oauth import get_auth_headers
 from text_utilities import xml_to_json
 from config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_TRACK_MODIFICATIONS, TRANSACTION_LOGGING
 from config import BASE_URL, API_KEY
-# NB: Might not need this. Still trying to decide how to handle GET/DELETE requests.
-from config import BODILESS_METHODS
+
 
 
 # Initialize our Flask app.
@@ -66,8 +65,7 @@ def process_request(request):
 	# The other two method calls handle getting our OAuth token and translating the
 	# incoming XML to the JSON that MOLE expects. Then we return the HTTP response code to our caller. 
 	try:
-		#if request.method in BODILESS_METHODS:
-		if len(request.data) == 0:
+		if not request.data:
 			# We've gotten a request (like a GET or DELETE) that doesn't have a body.
 			# Make the request, but don't try to parse the nonexistent XML. 
 			resp = mole_request(BASE_URL + request.path, headers=get_auth_headers())

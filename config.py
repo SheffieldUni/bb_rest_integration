@@ -1,9 +1,10 @@
 # MOLE URL and OAuth config.
-BASE_URL = 'https://sheffield-testmig2.blackboard.com/learn/api/public'
+# TODO: When we go live, replace these keys and don't check them into Git. 
+BASE_URL = 'https://vle-staging.sheffield.ac.uk/learn/api/public'
 OAUTH_URL = BASE_URL + '/v1/oauth2/token'
-OAUTH_CLIENT_ID = 'f973961c-e6bb-4485-859e-c1a6e578d554'
-OAUTH_SECRET = 'fFNs2cB69giOptspx0rhrNcJ3w7lv0mq'
-OAUTH_TIMEOUT = 3600 # Blackboard OAuth tokens expire after an hour.
+OAUTH_CLIENT_ID = '1509cc57-d0a9-47e7-b622-c04637bb3fbc'
+OAUTH_SECRET = '1WyvdgV9ZcZwZFzP3vQxUxsUUAtOFUPN'
+OAUTH_TIMEOUT = 3600
 
 # Database config.
 SQLALCHEMY_DATABASE_URI = 'mysql://mole_integration:mole@localhost/mole_integration'
@@ -14,10 +15,7 @@ TRANSACTION_LOGGING = True
 # TODO: Make this an actual secure key before you move to production. Duh.
 API_KEY = '8675309'
 
-# Top-level element for XML bodies sent from SITS. 
+# Top-level element for XML bodies sent from SITS.
 DATA_ELEMENT = 'data'
 
-# Methods that don't have bodies. If we get one of these, 
-# don't try to parse the nonexistent XML. 
-BODILESS_METHODS = ['GET', 'DELETE']
 
