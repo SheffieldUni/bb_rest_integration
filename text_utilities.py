@@ -7,12 +7,17 @@ def is_json(body):
 	# Helper method to check the body for JSON first, just in case someone got 
 	# clever and pre-transformed the body before calling us. If it parses
 	# as JSON, just hand it back. 
+	json_body = None
 	try:
-		json.loads(str(xml))
-		return True
+		json.loads(str(body))
+		print("That was JSON.") 
+		json_body = True
 	except ValueError:
 		# Oops. That wasn't JSON. 
-		return False
+		print("That wasn't JSON.")
+		json_body = False
+	
+	return json_body
 
 # Where all the magic translation happens. 
 # Depends on a generic top level XML element
@@ -30,5 +35,7 @@ def xml_to_json(body):
 		
 		# TODO: Error handling here? Can this go wrong?
 		return json.dumps(dict[DATA_ELEMENT])
+	else:
+		return body
 	
 #TODO: Do we need a function to go JSON -> XML? 
