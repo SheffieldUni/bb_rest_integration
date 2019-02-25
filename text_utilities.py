@@ -9,6 +9,17 @@ from config import DATA_ELEMENT
 # TODO: We can also get the values we need with list(dict.values())[0],
 # so do we need the name of the top element at all? 
 def xml_to_json(xml):
+
+	# Let's try parsing the body as JSON first, just in case someone got 
+	# clever and pre-transformed the body before calling us. If it parses
+	# as JSON, just hand it back. 
+	try:
+		json.loads(xml)
+		return xml
+	except ValueError:
+		# Oops. That wasn't JSON. Let's continue on and try parsing it as XML.
+		pass
+	
 	try:
 		dict = xmltodict.parse(xml)
 	except ExpatError as e:
