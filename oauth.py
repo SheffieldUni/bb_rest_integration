@@ -6,7 +6,7 @@ from config import OAUTH_CLIENT_ID, OAUTH_SECRET, OAUTH_URL, OAUTH_TIMEOUT
 from werkzeug.contrib.cache import RedisCache
 # TODO: Set up password authentication to keep the security people happy-ish. 
 #       Also lock down the approved IP addresses that Redis listens to.
-cache = RedisCache()
+cache = RedisCache(default_timeout=OAUTH_TIMEOUT)
 
 # Helper function to put together the proper headers for requests to MOLE. 
 def get_auth_headers():
@@ -24,7 +24,7 @@ def get_auth_token():
 			oauth = OAuth2Session(client=client)
 			token = oauth.fetch_token(token_url=OAUTH_URL, auth=auth)
 			access_token = token['access_token']
-			cache.set('access_token', access_token, timeout=OAUTH_TIMEOUT)
+			cache.set('access_token', access_token)
 		except Exception as e:
 			# Uh-oh. Something's gone wrong. Re-raise our exception.
 			# NB: Throwing around generic Exceptions is kind of terrible, 
