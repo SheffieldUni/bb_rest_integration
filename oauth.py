@@ -4,8 +4,7 @@ from requests_oauthlib import OAuth2Session
 from config import OAUTH_CLIENT_ID, OAUTH_SECRET, OAUTH_URL, OAUTH_TIMEOUT
 # This Redis cache can be swapped out with other supported caches. 
 from werkzeug.contrib.cache import RedisCache
-# TODO: Set up password authentication to keep the security people happy-ish. 
-#       Also lock down the approved IP addresses that Redis listens to.
+# TODO: Set up password authentication for some extra security. 
 cache = RedisCache(default_timeout=OAUTH_TIMEOUT)
 
 # Helper function to put together the proper headers for requests to MOLE. 

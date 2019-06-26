@@ -72,11 +72,13 @@ def process_request(request):
 			resp = mole_request(BASE_URL + request.path, headers=get_auth_headers())
 		else:
 			# Check to see if we're in an environment that sends XML instead of JSON. If so, transform it. 
+			# Otherwise, just pass the JSON body on. 
 			if TRANSFORM_XML:
 				body = xml_to_json(request.data)
 			else:
 				body = request.data
 			resp = mole_request(BASE_URL + request.path, headers=get_auth_headers(), data=body)
+			
 	except (RequestException, Exception) as e:
 		# One of a number of possibilities went wrong in the request. 
 		# (See http://docs.python-requests.org/en/master/_modules/requests/exceptions/ .) 
@@ -113,7 +115,7 @@ def create_user():
 	return process_request(request)
 
 @app.route('/v1/users/userName:<userId>', methods=['DELETE', 'PATCH', 'GET'])
-# PATCH = update, GET = query, DELETE = delete...duh.
+# PATCH = update, GET = query, DELETE = delete, obviously.
 def user_operations(userId):
 	return process_request(request)
 
@@ -131,7 +133,7 @@ def course_operations(courseId):
 	
 # --------------- COURSE MEMBERSHIPS ---------------
 @app.route('/v1/courses/courseId:<courseId>/users/userName:<userId>', methods=['PUT', 'PATCH', 'DELETE'])
-# PUT = create course membership, PATCH = update, DELETE = delete, obviously.
+# PUT = create course membership, PATCH = update, DELETE = delete.
 def course_membership_operations(courseId, userId):
 	return process_request(request)
 	
