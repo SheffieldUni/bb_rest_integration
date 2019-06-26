@@ -12,12 +12,12 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 
--- Dumping database structure for mole_integration
-DROP DATABASE IF EXISTS `mole_integration`;
-CREATE DATABASE IF NOT EXISTS `mole_integration` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `mole_integration`;
+-- Dumping database structure for bb_rest_integration
+DROP DATABASE IF EXISTS `bb_rest_integration`;
+CREATE DATABASE IF NOT EXISTS `bb_rest_integration` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `bb_rest_integration`;
 
--- Dumping structure for table mole_integration.error_record
+-- Dumping structure for table bb_rest_integration.error_record
 DROP TABLE IF EXISTS `error_record`;
 CREATE TABLE IF NOT EXISTS `error_record` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `error_record` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
--- Dumping structure for table mole_integration.transaction_record
+-- Dumping structure for table bb_rest_integration.transaction_record
 DROP TABLE IF EXISTS `transaction_record`;
 CREATE TABLE IF NOT EXISTS `transaction_record` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

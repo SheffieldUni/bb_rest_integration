@@ -7,7 +7,7 @@ OAUTH_SECRET = ''
 OAUTH_TIMEOUT = 3600
 
 # Database config.
-SQLALCHEMY_DATABASE_URI = 'mysql://user:pass@localhost/mole_integration'
+SQLALCHEMY_DATABASE_URI = 'mysql://user:pass@localhost/bb_rest_integration'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 TRANSACTION_LOGGING = True
 
