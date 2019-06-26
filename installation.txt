@@ -1,0 +1,22 @@
+Installation notes--to be expanded on. 
+This is just very basic right now. 
+
+1.) Make sure your system has the following installed: Python 3.5+, Apache 2, MariaDB, Redis. Ensure that Apache, MariaDB, and Redis are up and running as services. 
+
+2.) Create a virtual environment in your chosen directory (e.g., /var/www/bb_rest_integration). 
+
+3.) Activate your environment, then run "pip install -r requirements.txt" to get the needed Python libraries. 
+
+4.) Git clone the repository into your directory.
+
+5.) Run the bb_rest_integration.sql script in MariaDB to set up the database and tables that will log requests and errors. 
+
+6.) Still in MariaDB, add a user that will have access to the logging tables (e.g., "bb_rest") on localhost and set up its password. (Optionally give it network access to enable use of graphical database tools such as HeidiSQL or DBeaver.)
+
+7.) Edit config.py. Replace the following: 
+	- BASE_URL hostname with your Blackboard hostname
+	- OAUTH_CLIENT_ID and OAUTH_SECRET with your ID and secret from the Blackboard developer portal
+	- user:pass in SQLALCHEMY_DATABASE_URI with the username and password from the preceding step.
+	- API_KEY with a secure value 
+
+8.) [web server config -- certificate, force HTTPS, user to own application files, mod_wsgi, /etc/apache2/sites-enabled, WSGIPassAuthorization ON, etc.]
