@@ -125,8 +125,7 @@ def user_operations(userId):
 def create_course():
 	return process_request(request)
 
-# NB: The v2 route doesn't seem to work on staging. Use v1 for now.	
-@app.route('/v1/courses/courseId:<courseId>', methods=['DELETE', 'PATCH', 'GET'])
+@app.route('/v2/courses/courseId:<courseId>', methods=['DELETE', 'PATCH', 'GET'])
 # Methods do the same thing as user_operations, but on courses. 
 def course_operations(courseId):
 	return process_request(request)
