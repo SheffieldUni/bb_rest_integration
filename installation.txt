@@ -19,8 +19,7 @@ This is just very basic right now.
 	- user:pass in SQLALCHEMY_DATABASE_URI with the username and password from the preceding step.
 	- API_KEY with a secure value 
 
-8.) Install libapache2-mod-wsgi-py3 to enable serving Python scripts from Apache. 
+8.) If you're using Apache as your web server, install libapache2-mod-wsgi-py3 to enable serving Python scripts from Apache. (NB: Nginx + gunicorn should serve up Python scripts just as well, but I've only tested with Apache.) Also ensure that your site configuration file for this application includes the "WSGIPassAuthorization ON" setting--otherwise the API key check won't work. 
 
 9.) TODO: Clear up setting up WSGI file. Configuring with a virtual environment's a little messy. Chuck it for single-purpose servers? 
 
-[web server config -- certificate, force HTTPS, user to own application files,  /etc/apache2/sites-enabled, WSGIPassAuthorization ON, etc.]
