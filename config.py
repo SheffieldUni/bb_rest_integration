@@ -1,5 +1,4 @@
-# MOLE URL and OAuth config.
-# TODO: When we go live, replace these keys and don't check them into Git. 
+# Blackboard URL and OAuth endpoint/config.
 BASE_URL = 'https://your-blackboard-url.ac.uk/learn/api/public'
 OAUTH_URL = BASE_URL + '/v1/oauth2/token'
 OAUTH_CLIENT_ID = 'your-blackboard-client-id'

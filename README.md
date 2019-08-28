@@ -3,3 +3,5 @@ Experimental Flask integration layer between Blackboard and systems that can't h
 Runs under Python 3.5+.
 
 Currently requires a separate Redis installation for caching OAuth2 access tokens, but other caches are supported by the underlying Flask code.
+
+(Very much a work in progress, and only my second Flask app. Pull requests and improvements are very welcome.)

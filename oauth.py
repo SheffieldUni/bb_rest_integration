@@ -7,12 +7,12 @@ from werkzeug.contrib.cache import RedisCache
 # TODO: Set up password authentication for some extra security. 
 cache = RedisCache(default_timeout=OAUTH_TIMEOUT)
 
-# Helper function to put together the proper headers for requests to MOLE. 
+# Helper function to put together the proper headers for requests to Blackboard. 
 def get_auth_headers():
 	return {'Authorization': 'Bearer ' + get_auth_token(), 'Content-Type': 'application/json'}
 	
 
-# Get a cached OAuth2 token, or a new one from MOLE if the current token's expired. 
+# Get a cached OAuth2 token, or a new one from Blackboard if the current token's expired. 
 def get_auth_token():
 	access_token = cache.get('access_token')
 	if access_token is None:

@@ -1,5 +1,5 @@
-# Main module for integrating SITS with MOLE via Blackboard's REST APIs.
-# This exists because SITS doesn't currently speak OAuth2 or JSON, and 
+# Main module for integrating with Blackboard's REST APIs.
+# This exists because we had a system that didn't speak OAuth2 or JSON, and 
 # the REST APIs need both. 
 
 from flask import Flask, request, Response, make_response
@@ -43,7 +43,7 @@ def method_not_allowed(e):
 	log_error(request.path, request.method, error_msg, 405, request.data)
 	return make_response(error_msg, 405)
 	
-# Central handler function for forwarding requests to MOLE.
+# Central handler function for forwarding requests to Blackboard.
 # There's a bit of magic going on here, so be sure to read the comments. 
 def process_request(request):
 	# This first bit gets the appropriate function from the requests library
@@ -51,6 +51,9 @@ def process_request(request):
 	# E.g., if the original request came in as a POST, mole_request becomes
 	# requests.post(). The lower() call is because the the methods come in as
 	# UPPERCASE, but need to be lowercase to match the method names in requests. 
+	#
+	# (Why "mole_request"? At the time, our Blackboard system was called 
+	# MOLE--My Online Learning Environment.)
 	try:
 		mole_request = getattr(requests, request.method.lower())
 	except AttributeError:
@@ -61,10 +64,10 @@ def process_request(request):
 		return make_response(error_msg, 500)
 	
 	# This is where we do the actual get/post/etc. work. Request.path gets us the endpoint
-	# from the original request, which we can just tack onto the MOLE URL. 
+	# from the original request, which we can just tack onto the base Blackboard URL. 
 	#
 	# The other two method calls handle getting our OAuth token and translating the
-	# incoming XML to the JSON that MOLE expects. Then we return the HTTP response code to our caller. 
+	# incoming XML to the JSON that the REST APIs expect. Then we return the HTTP response code to our caller. 
 	try:
 		if not request.data:
 			# We've gotten a request (like a GET or DELETE) that doesn't have a body.
@@ -102,11 +105,11 @@ def process_request(request):
 #
 # Everything below here is basically a wrapper around Blackboard's REST API endpoints. 
 # They: 
-# 1.) get a cached OAuth2 access token (or get a new one from MOLE and cache it), 
-# 2.) build the authorization headers for actually talking to MOLE,  
-# 3.) transform the XML we get from SITS into JSON, 
-# 4.) send the JSON on to the right MOLE endpoint with the right method, and 
-# 5.) return the result to SITS. 
+# 1.) get a cached OAuth2 access token (or get a new one from Blackboard and cache it), 
+# 2.) build the authorization headers for actually talking to Blackboard,  
+# 3.) transform the XML we get from our caller into JSON, 
+# 4.) send the JSON on to the right Blackboard endpoint with the right method, and 
+# 5.) return the result to the caller. 
 
 
 # --------------- USERS ---------------
